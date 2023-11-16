@@ -4,15 +4,13 @@ var Book = require('../models').Book;
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  const books = await Book.findAll();
-  console.log(books);
-  res.json(books);
+  res.redirect('/books');
 });
 
 /* GET books page */
 router.get('/books', async function(req, res, next) {
   const books = await Book.findAll();
-  res.render('index', {books})
+  res.render('layout', {books})
 });
 
 /* Create a new book form */
