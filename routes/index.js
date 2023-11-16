@@ -10,7 +10,7 @@ router.get('/', async function(req, res, next) {
 /* GET books page */
 router.get('/books', async function(req, res, next) {
   const books = await Book.findAll();
-  res.render('layout', {books})
+  res.render('index', {books})
 });
 
 /* Create a new book form */

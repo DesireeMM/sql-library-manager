@@ -43,7 +43,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // handle 404 errors
   if (err.status === 404) {
-    res.render('page-not-found', {error: err})
+    res.render('error', {error: err})
   } else {
     // render the error page
     err.status = err.status || 500;
