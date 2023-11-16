@@ -10,19 +10,21 @@ router.get('/', async function(req, res, next) {
 /* GET books page */
 router.get('/books', async function(req, res, next) {
   const books = await Book.findAll();
-  res.render('index', {books})
+  res.render('index', {books, title: "Books"})
 });
 
 /* Create a new book form */
 router.get('/books/new', async function (req, res, next) {
-  res.render('books/new', {book: {}, title:"New Book"})
+  res.render('new-book', {book: {}, title:"New Book"})
 });
 
 /* POST create book */
 router.post('/books/new', async function (req, res, next) {
   let book;
   try {
+    console.log(req.body);
     book = await Book.create(req.body);
+    console.log(book.toJSON());
     res.redirect("/books/" + book.id)
   } catch (error) {
     throw error;
@@ -33,7 +35,7 @@ router.post('/books/new', async function (req, res, next) {
 router.get('/books/:id', async function (req, res, next) {
   const book = await Book.findByPk(req.params.id);
   if (book) {
-    res.render('books/' + book.id);
+    res.render('update-book', {book, title: "Edit Book"});
   } else {
     res.sendStatus(404);
   }
@@ -46,7 +48,7 @@ router.post('/books/:id', async function (req, res, next) {
     book = await Book.findByPk(req.params.id);
     if (book) {
       await book.update(req.body);
-      res.redirect('/books/' + book.id);
+      res.redirect('/books');
     } else {
       res.sendStatus(404);
     }
@@ -54,20 +56,10 @@ router.post('/books/:id', async function (req, res, next) {
     if (error.name === 'SequelizeValidationError') {
       book = await Book.build(req.body);
       book.id = req.params.id;
-      res.render('books/' + book.id, {book, errors: error.errors, title: "Edit Book"})
+      res.render('update-book', {book, errors: error.errors, title: "Edit Book"})
     } else {
       throw error;
     }
-  }
-});
-
-/* Delete a book form */
-router.get('/books/:id/delete', async function(req, res, next) {
-  const book = await Book.findByPk(req.params.id);
-  if (book) {
-    res.render('books/delete', {book, title: "Delete book"});
-  } else {
-    res.sendStatus(404);
   }
 });
 
