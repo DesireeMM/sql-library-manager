@@ -3,18 +3,23 @@ extends layout
 block content
     h1 New Book
     form(action="/books/new" method="POST")
+      if errors 
+        h2.error Oops! 
+        ul 
+          each error in errors 
+            li #{error.message}
       p
         label(for='title') Title
-        input#title(name='title' type='text')
+        input#title(name='title' type='text' value=errors ? book.title : "")
       p
         label(for='author') Author
-        input#author(name='author' type='text')
+        input#author(name='author' type='text' value=errors ? book.author : "")
       p
         label(for='genre') Genre
-        input#genre(name='genre' type='text')
+        input#genre(name='genre' type='text' value=errors ? book.genre : "")
       p
         label(for='year') Year
-        input#year(name='year' type='text')
+        input#year(name='year' type='text' value=errors ? book.year : "")
       p
         input(type='submit' value='Create New Book')
       p
