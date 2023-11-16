@@ -12,7 +12,7 @@ var app = express();
 
 // connect to db
 (async () => {
-  await sequelize.sync({force:true});
+  await sequelize.sync();
   try {
     await sequelize.authenticate();
     console.log("Connection to the database successful!");
@@ -36,18 +36,22 @@ app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  next(createError(404, "Uh oh, this page does not exist."));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // handle 404 errors
+  if (err.status === 404) {
+    res.render('page-not-found', {error: err})
+  } else {
+    // render the error page
+    err.status = err.status || 500;
+    err.message = err.message || "Oops, something went wrong.";
+    console.log(err.status, err.message);
+    res.render('error', {error: err});
+  }
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;
