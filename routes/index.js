@@ -12,12 +12,12 @@ router.get('/', async function(req, res, next) {
 /* GET books page */
 router.get('/books', async function(req, res, next) {
   const resultsPerPage = 10;
-  const page = req.query.page;
+  const page = parseInt(req.query.page);
   const offset = (page - 1) * resultsPerPage;
   const limit = resultsPerPage;
   const {numResults, books} = await Book.findAndCountAll({
-    limit: limit,
-    offset: offset
+    // limit: 10,
+    // offset: 0
   });
   const numPages = Math.ceil(numResults / resultsPerPage)
   res.render('index', {books, page, numPages, title: "Books"})
@@ -27,14 +27,15 @@ router.get('/books', async function(req, res, next) {
 router.get('/books/search?:query', async function (req, res, next) {
   const searchCat = req.query.searchCat;
   const searchTerm = req.query.searchTerm;
+  let whereObject;
   if (searchCat === "title") {
-    const whereObject = {title: {[Op.iLike]: `%${searchTerm}%`}}
+    whereObject = {title: {[Op.iLike]: `%${searchTerm}%`}}
   } else if (searchCat === "author") {
-    const whereObject = {author: {[Op.iLike]: `%${searchTerm}%`}}
+    whereObject = {author: {[Op.iLike]: `%${searchTerm}%`}}
   } else if (searchCat === genre) {
-    const whereObject = {genre: {[Op.iLike]: `%${searchTerm}%`}}
+    whereObject = {genre: {[Op.iLike]: `%${searchTerm}%`}}
   } else {
-    const whereObject = {year: {[Op.like]: `%${searchTerm}%`}}
+    whereObject = {year: {[Op.like]: `%${searchTerm}%`}}
   }
   const books = await Book.findAll({
     where: whereObject
