@@ -13,6 +13,17 @@ router.get('/books', async function(req, res, next) {
   res.render('index', {books, title: "Books"})
 });
 
+/* GET filtered books */
+router.get('/books/search', async function (req, res, next) {
+  console.log(req.body);
+  const books = await Book.findAll({
+    // where: {
+    //   req.body.search-by: req.body.search-term
+    // }
+  });
+  res.render('index', {books, title: "Search Results"})
+})
+
 /* Create a new book form */
 router.get('/books/new', async function (req, res, next) {
   res.render('new-book', {book: {}, title:"New Book"})

@@ -4,6 +4,16 @@ block content
     h1 Books
     p
         a.button(href='/books/new') Create New Book
+    form(method="GET" action="/books/search")
+      label(for="search-by" class="search-bar") Search by:
+      select(name="search-by" id="search-by") 
+        option(value="title") Title 
+        option(value="author") Author 
+        option(value="genre") Genre 
+        option(value="year") Year
+      label(for="search-term" class="search-bar")
+      input(type="text" name="search-term" id="search-term")
+      input(type="submit" value="Search")
     table
         thead
         tr
@@ -12,10 +22,10 @@ block content
             th Genre
             th Year
         tbody
-        each book in books 
+          each book in books 
             tr 
-            td 
-                a(href='books/' + book.id) #{book.title}
-            td #{book.author}
-            td #{book.genre}
-            td #{book.year}
+                td 
+                    a(href='books/' + book.id) #{book.title}
+                td #{book.author}
+                td #{book.genre}
+                td #{book.year}
