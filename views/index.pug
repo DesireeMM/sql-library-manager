@@ -34,9 +34,9 @@ block content
                   td #{book.genre}
                   td #{book.year}
       div.btn-container
-        button(type="button") Previous 
+        a.button(href=`/books?page=${page - 1}`) Previous 
         p #{page} of #{numPages}
-        button(type="button") Next
+        a.button(href=`/books?page=${page + 1}`) Next
     else 
       h2 Sorry, no results match your search 
       a.button(href="/books") Back

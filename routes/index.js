@@ -12,15 +12,15 @@ router.get('/', async function(req, res, next) {
 /* GET books page */
 router.get('/books', async function(req, res, next) {
   const resultsPerPage = 10;
-  const page = parseInt(req.query.page);
+  const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * resultsPerPage;
   const limit = resultsPerPage;
-  const {numResults, books} = await Book.findAndCountAll({
-    // limit: 10,
-    // offset: 0
+  const { count,  rows } = await Book.findAndCountAll({
+    limit: limit,
+    offset: offset
   });
-  const numPages = Math.ceil(numResults / resultsPerPage)
-  res.render('index', {books, page, numPages, title: "Books"})
+  const numPages = Math.ceil(count / resultsPerPage)
+  res.render('index', {books: rows, page, numPages, title: "Books"})
 });
 
 /* GET filtered books */
