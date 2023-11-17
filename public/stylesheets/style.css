@@ -95,3 +95,39 @@ input[type=text] {
 .error {
   color: rgb(236, 15, 15);
 }
+
+.search-bar {
+  display: flex;
+}
+
+.search-bar input {
+  width: 100%;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #6D435A;
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.search-bar input::placeholder {
+  color: #929b9e;
+}
+
+.search-bar button {
+  cursor: pointer;
+  width: 100px;
+  border-radius: 0 4px 4px 0;
+  border: 1px solid #6D435A;
+  border-left: none;
+  padding: 0px 5px;
+  font-size: 14px;
+  background-color: #6D435A;
+  color: #fff;
+}
+
+.search-bar button img {
+  width: 25px;
+}
+
+.btn-container {
+  display: flex;
+}

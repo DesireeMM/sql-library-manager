@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Book = require('../models').Book;
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -9,17 +11,33 @@ router.get('/', async function(req, res, next) {
 
 /* GET books page */
 router.get('/books', async function(req, res, next) {
-  const books = await Book.findAll();
-  res.render('index', {books, title: "Books"})
+  const resultsPerPage = 10;
+  const page = req.query.page;
+  const offset = (page - 1) * resultsPerPage;
+  const limit = resultsPerPage;
+  const {numResults, books} = await Book.findAndCountAll({
+    limit: limit,
+    offset: offset
+  });
+  const numPages = Math.ceil(numResults / resultsPerPage)
+  res.render('index', {books, page, numPages, title: "Books"})
 });
 
 /* GET filtered books */
-router.get('/books/search', async function (req, res, next) {
-  console.log(req.body);
+router.get('/books/search?:query', async function (req, res, next) {
+  const searchCat = req.query.searchCat;
+  const searchTerm = req.query.searchTerm;
+  if (searchCat === "title") {
+    const whereObject = {title: {[Op.iLike]: `%${searchTerm}%`}}
+  } else if (searchCat === "author") {
+    const whereObject = {author: {[Op.iLike]: `%${searchTerm}%`}}
+  } else if (searchCat === genre) {
+    const whereObject = {genre: {[Op.iLike]: `%${searchTerm}%`}}
+  } else {
+    const whereObject = {year: {[Op.like]: `%${searchTerm}%`}}
+  }
   const books = await Book.findAll({
-    // where: {
-    //   req.body.search-by: req.body.search-term
-    // }
+    where: whereObject
   });
   res.render('index', {books, title: "Search Results"})
 })
