@@ -83,7 +83,9 @@ router.get('/books/:id', async function (req, res, next) {
   if (book) {
     res.render('update-book', {book, title: "Edit Book"});
   } else {
-    res.sendStatus(404);
+    const err = new Error("Uh oh, looks like this page does not exist.");
+    err.status = 404;
+    next(err);
   }
 });
 
@@ -96,7 +98,9 @@ router.post('/books/:id', async function (req, res, next) {
       await book.update(req.body);
       res.redirect('/books');
     } else {
-      res.sendStatus(404);
+      const err = new Error("Uh oh, looks like this page does not exist.");
+      err.status = 404;
+      next(err);
     }
   } catch (error) {
     if (error.name === 'SequelizeValidationError') {
@@ -116,7 +120,9 @@ router.post('/books/:id/delete', async function (req, res, next) {
     await book.destroy();
     res.redirect('/books')
   } else {
-    res.sendStatus(404);
+    const err = new Error("Uh oh, looks like this page does not exist.");
+    err.status = 404;
+    next(err);
   }
 });
 
