@@ -24,23 +24,35 @@ router.get('/books', async function(req, res, next) {
 });
 
 /* GET filtered books */
-router.get('/books/search?:query', async function (req, res, next) {
+router.get('/books/search', async function (req, res, next) {
+  // get search terms from query string
   const searchCat = req.query.searchCat;
   const searchTerm = req.query.searchTerm;
+
+  // define where object
   let whereObject;
   if (searchCat === "title") {
-    whereObject = {title: {[Op.iLike]: `%${searchTerm}%`}}
+    whereObject = {title: {[Op.like]: `%${searchTerm}%`}}
   } else if (searchCat === "author") {
-    whereObject = {author: {[Op.iLike]: `%${searchTerm}%`}}
-  } else if (searchCat === genre) {
-    whereObject = {genre: {[Op.iLike]: `%${searchTerm}%`}}
+    whereObject = {author: {[Op.like]: `%${searchTerm}%`}}
+  } else if (searchCat === "genre") {
+    whereObject = {genre: {[Op.like]: `%${searchTerm}%`}}
   } else {
     whereObject = {year: {[Op.like]: `%${searchTerm}%`}}
   }
-  const books = await Book.findAll({
+
+  // filtered sql query with pagination
+  const resultsPerPage = 10;
+  const page = parseInt(req.query.page) || 1;
+  const offset = (page - 1) * resultsPerPage;
+  const limit = resultsPerPage;
+  const {count, rows} = await Book.findAndCountAll({
+    limit: limit,
+    offset: offset,
     where: whereObject
   });
-  res.render('index', {books, title: "Search Results"})
+  const numPages = Math.ceil(count / resultsPerPage);
+  res.render('index', {books: rows, page, numPages, title: "Search Results"})
 })
 
 /* Create a new book form */

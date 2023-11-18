@@ -2,19 +2,21 @@ extends layout
 
 block content
     h1 Books
+    p 
+      a.button(href='/books') Home
     p
       a.button(href='/books/new') Create New Book
     div.search-bar
       form(method="GET" action="/books/search")
         label.search-bar(for="searchCat")
           select(name="searchCat" id="searchCat" required) 
-            optgroup(label="Search By:")
-              option(value="title") Title 
-              option(value="author") Author 
-              option(value="genre") Genre 
-              option(value="year") Year
+            option(value=null) Search By:
+            option(value="title") Title 
+            option(value="author") Author 
+            option(value="genre") Genre 
+            option(value="year") Year
           label(for="searchTerm" class="search-bar")
-            input(type="text" name="searchTerm" id="searchTerm" placeholder="Search for books")
+            input(type="text" name="searchTerm" id="searchTerm" placeholder="Search for books" required)
           button(type="submit")
             img(src='/images/search-icon.svg' alt="Search icon")
     if books
@@ -34,9 +36,11 @@ block content
                   td #{book.genre}
                   td #{book.year}
       div.btn-container
-        a.button(href=`/books?page=${page - 1}`) Previous 
+        a(href=`/books?page=${page - 1}`)
+          button(disabled=`${page}` == 1) Previous 
         p #{page} of #{numPages}
-        a.button(href=`/books?page=${page + 1}`) Next
+        a(href=`/books?page=${page + 1}`)
+          button(disabled=`${page}` == `${numPages}`) Next
     else 
       h2 Sorry, no results match your search 
       a.button(href="/books") Back

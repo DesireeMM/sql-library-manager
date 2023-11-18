@@ -100,6 +100,11 @@ input[type=text] {
   display: flex;
 }
 
+.search-bar select {
+  font-family: "Raleway";
+  border-color:#6D435A;
+}
+
 .search-bar input {
   width: 100%;
   border-radius: 4px 0 0 4px;
@@ -138,4 +143,23 @@ input[type=text] {
 
 .btn-container {
   display: flex;
+}
+
+a button {
+  color: white;
+  background: #6D435A;
+  font-family: "Raleway", sans-serif;
+  padding: 10px 14px 12px;
+  font-size: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+a button:hover {
+  background:#01b189
+}
+
+a button:disabled {
+  color: black;
+  background:#e7e7e7;
 }
