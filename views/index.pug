@@ -20,27 +20,28 @@ block content
           button(type="submit")
             img(src='/images/search-icon.svg' alt="Search icon")
     if books
-      table
-          thead
-          tr
-              th Title
-              th Author
-              th Genre
-              th Year
-          tbody
-            each book in books 
-              tr 
-                  td 
-                      a(href='books/' + book.id) #{book.title}
-                  td #{book.author}
-                  td #{book.genre}
-                  td #{book.year}
-      div.btn-container
-        a(href=`/books?page=${page - 1}`)
-          button(disabled=`${page}` == 1) Previous 
-        p #{page} of #{numPages}
-        a(href=`/books?page=${page + 1}`)
-          button(disabled=`${page}` == `${numPages}`) Next
+      div.main-container
+        table
+            thead
+            tr
+                th Title
+                th Author
+                th Genre
+                th Year
+            tbody
+              each book in books 
+                tr 
+                    td 
+                        a(href='books/' + book.id) #{book.title}
+                    td #{book.author}
+                    td #{book.genre}
+                    td #{book.year}
+        div.btn-container
+          a(href=`/books?page=${page - 1}`)
+            button(disabled=`${page}` == 1) Previous 
+          p #{page} of #{numPages}
+          a(href=`/books?page=${page + 1}`)
+            button(disabled=`${page}` == `${numPages}`) Next
     else 
       h2 Sorry, no results match your search 
       a.button(href="/books") Back

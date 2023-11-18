@@ -143,6 +143,7 @@ input[type=text] {
 
 .btn-container {
   display: flex;
+  max-width: 100%;
 }
 
 a button {
@@ -162,4 +163,8 @@ a button:hover {
 a button:disabled {
   color: black;
   background:#e7e7e7;
+}
+
+.main-container {
+  width: fit-content;
 }
